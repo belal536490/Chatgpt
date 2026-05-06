@@ -254,7 +254,7 @@ textarea#tin::placeholder{color:var(--t3)}
   <div class="sb-bot">
     <div class="tok-row"><span class="tok-l">Session tokens</span><span class="tok-v" id="tokN">0</span></div>
     <div class="tok-tr"><div class="tok-f" id="tokF" style="width:0%"></div></div>
-    <div style="font-size:10px;color:var(--t3);font-family:var(--mono);margin-top:4px">Max: 200K tokens</div>
+    <div style="font-size:10px;color:var(--t3);font-family:var(--mono);margin-top:4px">Max context: 200K | Output: 64K</div>
   </div>
 </div>
 
@@ -452,7 +452,23 @@ async function sendMsg() {
   loading=true;
   document.getElementById('sendBtn').disabled=true;
 
-  var sys = 'You are a helpful, creative, and precise assistant. When asked to build websites, create complete HTML files with all CSS and JS inline. Always respond in the language the user uses (Bengali or English).\n\n' + getToolSys();
+  var sys = `You are an expert web developer and creative assistant specialized in building IELTS vocabulary learning platforms. You always respond in the language the user writes in (Bengali or English).
+
+CRITICAL RULES FOR WEBSITE BUILDING:
+1. When asked to build any part of a website, write COMPLETE code — never truncate, never write "// continue here" or "rest of code..."
+2. Always wrap file content with: [FILE:filename.html] ... [/FILE]
+3. For large websites, build section by section if needed — user will ask for next part
+4. Use these exact colors: Sidebar #111827, Content #F8F9FB, Blue #1B3A6B, Gold #D4A843
+5. All CSS and JS must be inline in the HTML file — no external files
+
+AccentMaster website specs:
+- Student dashboard: Top 1000 Words, Smart Review, Difficult Words, Irregular Verbs, My Report, Word Groups
+- Word card tabs: YouTube (YouTube Data API v3), উচ্চারণ (Bengali phonetics), অর্থ (meanings+synonyms+antonyms), Sentences (10 sentences), Spelling (chunking+mnemonic+game), Practice (Web Speech API)
+- Admin panel: Dashboard, User List, Vocabulary Upload, API Setup, Edit Content
+- Data: localStorage (no server needed)
+- Upload: ONLY admin can upload vocabulary — students cannot
+
+\` + getToolSys();
 
   try {
     var endpoint = srvUrl ? srvUrl+'/api/chat' : 'https://api.anthropic.com/v1/messages';
@@ -460,11 +476,11 @@ async function sendMsg() {
 
     if (srvUrl) {
       // Use proxy server
-      body = JSON.stringify({ apiKey, model, system:sys, messages:messages.slice(-20), max_tokens:8192 });
+      body = JSON.stringify({ apiKey, model, system:sys, messages:messages.slice(-20), max_tokens:64000 });
       headers = { 'Content-Type':'application/json' };
     } else {
       // Direct (only works when served from same origin)
-      body = JSON.stringify({ model, max_tokens:8192, system:sys, messages:messages.slice(-20) });
+      body = JSON.stringify({ model, max_tokens:64000, system:sys, messages:messages.slice(-20) });
       headers = { 'Content-Type':'application/json', 'x-api-key':apiKey, 'anthropic-version':'2023-06-01' };
     }
 

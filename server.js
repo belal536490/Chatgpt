@@ -25,7 +25,7 @@ app.post('/api/chat', async (req, res) => {
       },
       body: JSON.stringify({
         model: model || 'claude-sonnet-4-5',
-        max_tokens: max_tokens || 8192,
+        max_tokens: max_tokens || 64000,
         system: system || '',
         messages: messages
       })
