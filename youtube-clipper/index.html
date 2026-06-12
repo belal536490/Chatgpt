@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Clip Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#0f172a; color:white; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; }
+    .box { width:90%; max-width:600px; background:#111827; padding:20px; border-radius:12px; }
+    input, button { width:100%; padding:12px; margin-top:10px; border-radius:8px; border:none; }
+    button { background:#22c55e; color:black; font-weight:bold; cursor:pointer; }
+    .clips { margin-top:20px; }
+    .clip { background:#1f2937; padding:10px; margin-top:10px; border-radius:8px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>YouTube Video to Clips</h2>
+    <input id="url" placeholder="Paste YouTube link here" />
+    <button onclick="generateClips()">Generate Clips</button>
+    <div class="clips" id="clips"></div>
+  </div>
+
+<script>
+async function generateClips() {
+  const url = document.getElementById('url').value;
+  const clipsDiv = document.getElementById('clips');
+  clipsDiv.innerHTML = 'Processing...';
+
+  setTimeout(() => {
+    clipsDiv.innerHTML = '';
+    for (let i = 1; i <= 5; i++) {
+      const div = document.createElement('div');
+      div.className = 'clip';
+      div.innerHTML = `Clip ${i}: segment from video (backend required)`;
+      clipsDiv.appendChild(div);
+    }
+  }, 1500);
+}
+</script>
+</body>
+</html>
